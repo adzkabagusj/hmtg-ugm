@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WorksGallery from "@/components/karya/WorksGallery";
-import CalendarShowcase from "@/components/karya/CalendarShowcase";
+// import CalendarShowcase from "@/components/karya/CalendarShowcase";
 import { FaFeatherAlt } from "react-icons/fa";
 import { fetchAPI } from "@/lib/strapi";
 import { Work } from "@/types/strapi";

@@ -1,3 +1,5 @@
+import type { BlocksContent } from "@strapi/blocks-react-renderer";
+
 // Tipe Dasar Strapi
 export interface StrapiImage {
   id: number;
@@ -41,7 +43,7 @@ export interface Activity {
   category: string;
   location: string;
   description: string;
-  content: any; // Blocks content
+  content: BlocksContent;
   images: StrapiImage[];
 }
 
