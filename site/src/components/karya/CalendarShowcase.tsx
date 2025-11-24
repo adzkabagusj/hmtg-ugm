@@ -34,7 +34,7 @@ export default function CalendarShowcase() {
             <p className="font-fraunces text-lg text-off-white/70 mb-8 leading-relaxed max-w-md">
               Koleksi foto singkapan geologi terbaik nusantara, dikemas dalam
               desain kalender meja eksklusif. Tema bulan ini:{" "}
-              <strong>"{currentMonth} - Batuan Metamorf"</strong>.
+              <strong>&quot;{currentMonth} - Batuan Metamorf&quot;</strong>.
             </p>
 
             <div className="flex flex-wrap gap-4">

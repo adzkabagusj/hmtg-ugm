@@ -1,16 +1,35 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WorksGallery from "@/components/karya/WorksGallery";
-import CalendarShowcase from "@/components/karya/CalendarShowcase"; // Import Baru
+import CalendarShowcase from "@/components/karya/CalendarShowcase";
 import { FaFeatherAlt } from "react-icons/fa";
+import { fetchAPI } from "@/lib/strapi";
+import { Work } from "@/types/strapi";
 
-export default function KaryaPage() {
+// Fungsi Fetch Data dari Strapi
+async function getWorks() {
+  try {
+    const res = await fetchAPI("/works", {
+      populate: "*", // Ambil semua field termasuk gambar
+      sort: "id:desc", // Urutkan dari yang terbaru
+    });
+    return res?.data ? (res.data as Work[]) : [];
+  } catch (error) {
+    console.error("Error fetching works:", error);
+    return [];
+  }
+}
+
+export default async function KaryaPage() {
+  // Panggil data
+  const works = await getWorks();
+
   return (
     <div className="min-h-screen flex flex-col bg-dark-purple text-off-white">
       <Navbar />
 
       <main className="flex-grow pt-32 pb-24">
-        {/* HEADER SECTION */}
+        {/* HEADER SECTION (Tetap Sesuai Desain Awal) */}
         <section className="container mx-auto px-6 mb-16">
           <div className="flex flex-col md:flex-row items-end gap-6 border-b border-off-white/10 pb-8">
             <div className="flex-grow">
@@ -31,11 +50,11 @@ export default function KaryaPage() {
           </div>
         </section>
 
-        {/* NEW SECTION: KALENDER HMTG (Di Atas Trivia) */}
-        <CalendarShowcase />
+        {/* KALENDER HMTG (Tetap Ada) */}
+        {/* <CalendarShowcase /> */}
 
-        {/* EXISTING SECTION: TRIVIA BUMI */}
-        <WorksGallery />
+        {/* GALLERY SECTION (Sekarang Dinamis) */}
+        <WorksGallery data={works} />
       </main>
 
       <Footer />

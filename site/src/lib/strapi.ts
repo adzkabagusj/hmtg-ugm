@@ -1,9 +1,11 @@
+import qs from "qs";
+
 // Helper untuk mendapatkan URL API
 export function getStrapiURL() {
   return process.env.NEXT_PUBLIC_STRAPI_API_URL ?? "http://localhost:1337";
 }
 
-// Helper untuk membuat URL gambar lengkap (karena Strapi kadang memberi relative path)
+// Helper untuk membuat URL gambar lengkap
 export function getStrapiMedia(url: string | null) {
   if (url == null) {
     return null;
@@ -33,18 +35,31 @@ export async function fetchAPI(
       ...options,
     };
 
-    // Build request URL
-    const queryString = new URLSearchParams(urlParamsObject).toString();
+    // Build request URL dengan qs
+    // encodeValuesOnly: true membuat URL lebih bersih namun tetap valid untuk Strapi
+    const queryString = qs.stringify(urlParamsObject, {
+      encodeValuesOnly: true,
+    });
+
     const requestUrl = `${getStrapiURL()}/api${path}${
       queryString ? `?${queryString}` : ""
     }`;
 
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
+
+    // Handle jika response tidak OK (misal 404 atau 500)
+    if (!response.ok) {
+      console.error(
+        `Error fetching API: ${response.status} ${response.statusText}`
+      );
+      return null; // Return null agar komponen pemanggil bisa handle error
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
+    console.error("Fetch API Error:", error);
     return null; // Return null jika error agar tidak crash
   }
 }

@@ -1,16 +1,29 @@
-"use client";
-
 import Link from "next/link";
 import {
   FaInstagram,
-  FaFacebook,
   FaLinkedin,
   FaYoutube,
   FaEnvelope,
+  FaTiktok,
 } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6"; // Icon X terbaru
+import { fetchAPI } from "@/lib/strapi";
+import { LandingPageData } from "@/types/strapi";
 
-export default function Footer() {
+// Fungsi fetch data Landing Page (Single Type)
+async function getFooterData() {
+  try {
+    const res = await fetchAPI("/landing-page", {
+      populate: "*",
+    });
+    return res?.data ? (res.data as LandingPageData) : null;
+  } catch (error) {
+    console.error("Error fetching footer data:", error);
+    return null;
+  }
+}
+
+export default async function Footer() {
+  const data = await getFooterData();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -31,48 +44,53 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Kolom 2: Alamat (Data Real) */}
+          {/* Kolom 2: Alamat (Dinamis dari Strapi) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="font-birds text-2xl text-pale-rose">Sekretariat</h4>
-            <p className="font-fraunces text-sm text-off-white/80 leading-relaxed max-w-md">
-              Jl. Grafika Bulaksumur No.2, Senolowo, Sinduadi, Kec. Mlati,
-              Kabupaten Sleman, Daerah Istimewa Yogyakarta 55284
+            <p className="font-fraunces text-sm text-off-white/80 leading-relaxed max-w-md whitespace-pre-line">
+              {data?.contactAddress ||
+                "Jl. Grafika Bulaksumur No.2, Senolowo, Sinduadi, Kec. Mlati, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55284"}
             </p>
             <div className="flex items-center gap-2 text-sm text-pale-rose hover:text-white transition-colors">
               <FaEnvelope />
-              <a href="mailto:hmtg.ft@ugm.ac.id">hmtg.ft@ugm.ac.id</a>
+              <a href={`mailto:${data?.contactEmail || "hmtg.ft@ugm.ac.id"}`}>
+                {data?.contactEmail || "hmtg.ft@ugm.ac.id"}
+              </a>
             </div>
           </div>
 
-          {/* Kolom 3: Social Media (Data Real) */}
+          {/* Kolom 3: Social Media (Dinamis dari Strapi) */}
           <div className="space-y-4">
             <h4 className="font-birds text-2xl text-pale-rose">Terhubung</h4>
-            <div className="flex gap-4">
-              <SocialIcon
-                href="https://www.instagram.com/hmtg_ftugm/"
-                icon={<FaInstagram />}
-                label="Instagram"
-              />
-              <SocialIcon
-                href="https://x.com/hmtg_ftugm"
-                icon={<FaXTwitter />}
-                label="Twitter/X"
-              />
-              <SocialIcon
-                href="https://www.linkedin.com/company/himpunan-mahasiswa-teknik-geologi-ft-ugm/"
-                icon={<FaLinkedin />}
-                label="LinkedIn"
-              />
-              <SocialIcon
-                href="https://web.facebook.com/people/hmtg_ftugm/100079858263879/"
-                icon={<FaFacebook />}
-                label="Facebook"
-              />
-              <SocialIcon
-                href="https://www.youtube.com/channel/UCVFZXIECpsplf2-CBPAnm9A"
-                icon={<FaYoutube />}
-                label="YouTube"
-              />
+            <div className="flex gap-4 flex-wrap">
+              {data?.socialInstagram && (
+                <SocialIcon
+                  href={data.socialInstagram}
+                  icon={<FaInstagram />}
+                  label="Instagram"
+                />
+              )}
+              {data?.socialLinkedin && (
+                <SocialIcon
+                  href={data.socialLinkedin}
+                  icon={<FaLinkedin />}
+                  label="LinkedIn"
+                />
+              )}
+              {data?.socialYoutube && (
+                <SocialIcon
+                  href={data.socialYoutube}
+                  icon={<FaYoutube />}
+                  label="YouTube"
+                />
+              )}
+              {data?.socialTiktok && (
+                <SocialIcon
+                  href={data.socialTiktok}
+                  icon={<FaTiktok />}
+                  label="TikTok"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -96,7 +114,7 @@ export default function Footer() {
   );
 }
 
-// Komponen Kecil untuk Icon agar rapi
+// Komponen Kecil untuk Icon
 function SocialIcon({
   href,
   icon,

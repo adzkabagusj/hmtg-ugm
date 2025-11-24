@@ -1,109 +1,161 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
-import PhotoCarousel from "@/components/ui/PhotoCarousel";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import { Journey } from "@/types/strapi";
+import { getStrapiMedia } from "@/lib/strapi";
 
-// DUMMY DATA JOURNEY (Sesuai briefing: Kegiatan dari Awal - Akhir)
-const JOURNEY_DATA = [
-  {
-    id: 1,
-    title: "Pelantikan Pengurus HMTG 2024",
-    date: "20 Januari 2024",
-    location: "Ruang Sidang Utama FT UGM",
-    description:
-      "Momen awal perjalanan kepengurusan. Upacara pelantikan dan serah terima jabatan dari pengurus periode sebelumnya, menandai dimulainya semangat baru 'Gesa Gesu Sesu Sasa'.",
-    photos: ["/img1.jpg", "/img2.jpg", "/img3.jpg"], // Array foto dummy
-  },
-  {
-    id: 2,
-    title: "Makrab Geologi: 'Stratigrafi Kebersamaan'",
-    date: "15 Februari 2024",
-    location: "Kaliurang, Yogyakarta",
-    description:
-      "Malam keakraban untuk mempererat ikatan antar anggota baru dan pengurus. Diisi dengan sharing session, api unggun, dan pentas seni angkatan.",
-    photos: ["/img4.jpg", "/img5.jpg"],
-  },
-  {
-    id: 3,
-    title: "Geology Goes to School",
-    date: "10 Maret 2024",
-    location: "SMAN 1 Yogyakarta",
-    description:
-      "Kegiatan pengabdian masyarakat berupa sosialisasi ilmu kebumian dan mitigasi bencana kepada siswa-siswi SMA di Yogyakarta.",
-    photos: ["/img6.jpg", "/img7.jpg", "/img8.jpg", "/img9.jpg"],
-  },
-  {
-    id: 4,
-    title: "Wisuda Periode Mei & Arak-arakan",
-    date: "24 Mei 2024",
-    location: "Graha Sabha Pramana UGM",
-    description:
-      "Perayaan kelulusan kakak-kakak wisudawan. Tradisi arak-arakan meriah dari GSP menuju Departemen Teknik Geologi sebagai bentuk apresiasi terakhir.",
-    photos: ["/img10.jpg"],
-  },
-];
+interface JourneyGalleryProps {
+  data: Journey[];
+}
 
-export default function JourneyGallery() {
+// Sub-komponen untuk menangani State Carousel per item
+const JourneyItem = ({ item, isEven }: { item: Journey; isEven: boolean }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Ambil array foto (aman jika null)
+  const photos = item.photos || [];
+  const hasMultiplePhotos = photos.length > 1;
+
+  // Fungsi Navigasi Carousel
+  const nextPhoto = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % photos.length);
+  };
+
+  const prevPhoto = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  };
+
+  // URL Gambar saat ini
+  const currentImageUrl =
+    photos.length > 0 ? getStrapiMedia(photos[currentImageIndex].url) : null;
+
   return (
-    <div className="container mx-auto px-6 py-12">
-      <div className="space-y-20">
-        {JOURNEY_DATA.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8 }}
-            className="group">
-            {/* 1. Header Item: Garis Waktu & Judul */}
-            <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6 border-b border-dark-purple/10 pb-4">
-              <div className="flex-grow">
-                <div className="flex items-center gap-3 text-sm font-fraunces text-pale-rose mb-2 font-bold uppercase tracking-wider">
-                  <span className="flex items-center gap-2">
-                    <FaCalendarAlt /> {item.date}
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-muted-purple/30" />
-                  <span className="flex items-center gap-2">
-                    <FaMapMarkerAlt /> {item.location}
-                  </span>
-                </div>
-                <h2 className="font-hamburg text-4xl md:text-5xl text-dark-purple group-hover:text-muted-purple transition-colors">
-                  {item.title}
-                </h2>
-              </div>
-              <div className="text-right hidden md:block">
-                <span className="font-birds text-6xl text-dark-purple/5 group-hover:text-pale-rose/20 transition-colors">
-                  {(index + 1).toString().padStart(2, "0")}
-                </span>
-              </div>
-            </div>
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6 }}
+      className={`relative flex flex-col md:flex-row gap-8 items-center ${
+        isEven ? "md:flex-row-reverse" : ""
+      }`}>
+      {/* TIMELINE DOT */}
+      <div className="absolute left-0 md:left-1/2 w-5 h-5 rounded-full bg-off-white border-4 border-dark-purple transform -translate-x-1/2 md:-translate-x-1/2 top-0 md:top-8 z-10" />
 
-            {/* 2. Content Body: Deskripsi & Carousel */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Deskripsi (Kiri/Atas) */}
-              <div className="lg:col-span-4 font-fraunces text-muted-purple leading-relaxed text-lg text-justify">
-                <p>{item.description}</p>
-              </div>
-
-              {/* Carousel Foto (Kanan/Bawah) */}
-              <div className="lg:col-span-8">
-                <PhotoCarousel images={item.photos} />
-                <div className="mt-3 flex justify-between items-center text-xs font-fraunces text-muted-purple/50">
-                  <span>Dokumentasi Kegiatan</span>
-                  <span>{item.photos.length} Foto</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+      {/* SIDE A: TEXT CONTENT */}
+      <div className="w-full md:w-1/2 pl-6 md:pl-0 md:pr-16 md:text-right">
+        <div
+          className={`flex flex-col ${
+            isEven
+              ? "md:items-end md:text-right"
+              : "md:items-start md:text-left"
+          }`}>
+          <div className="font-fraunces text-pale-rose font-bold text-xl mb-2 flex items-center gap-2">
+            <FaCalendarAlt /> {item.date}
+          </div>
+          <h3 className="font-hamburg text-4xl text-dark-purple mb-4">
+            {item.title}
+          </h3>
+          <p className="font-fraunces text-muted-purple mb-4 leading-relaxed">
+            {item.description}
+          </p>
+          <div className="inline-flex items-center gap-2 text-sm font-bold text-dark-purple bg-pale-rose/10 px-4 py-2 rounded-full">
+            <FaMapMarkerAlt className="text-pale-rose" />
+            {item.location}
+          </div>
+        </div>
       </div>
 
-      {/* Decorative End Line */}
-      <div className="mt-24 text-center">
-        <span className="font-birds text-2xl text-pale-rose">
-          To be continued...
-        </span>
+      {/* SIDE B: PHOTO FRAME & CAROUSEL */}
+      <div
+        className={`w-full md:w-1/2 pl-6 md:pl-16 ${
+          isEven ? "md:pr-0 md:pl-0 lg:pr-16" : ""
+        }`}>
+        <div className="relative p-2 border-2 border-dark-purple/10 bg-white shadow-xl rotate-1 hover:rotate-0 transition-transform duration-500 group">
+          <div className="relative aspect-video overflow-hidden bg-gray-200 group">
+            {/* Display Image dengan Animasi Fade */}
+            <AnimatePresence mode="wait">
+              {currentImageUrl ? (
+                <motion.img
+                  key={currentImageIndex} // Kunci ini memicu animasi saat index berubah
+                  src={currentImageUrl}
+                  alt={item.title}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-cover filter sepia-[.2] hover:sepia-0 transition-all duration-500"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-purple bg-off-white">
+                  <span className="font-fraunces text-sm">No Photo</span>
+                </div>
+              )}
+            </AnimatePresence>
+
+            {/* Tombol Navigasi (Hanya muncul jika > 1 foto) */}
+            {hasMultiplePhotos && (
+              <>
+                <button
+                  onClick={prevPhoto}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-dark-purple/50 hover:bg-dark-purple text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 z-20">
+                  <FaChevronLeft size={14} />
+                </button>
+                <button
+                  onClick={nextPhoto}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-dark-purple/50 hover:bg-dark-purple text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 z-20">
+                  <FaChevronRight size={14} />
+                </button>
+
+                {/* Indikator Dots */}
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-20">
+                  {photos.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`w-1.5 h-1.5 rounded-full shadow-sm transition-all ${
+                        idx === currentImageIndex
+                          ? "bg-pale-rose scale-125"
+                          : "bg-white/70"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Pin Decoration (Tetap Ada) */}
+          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-pale-rose border border-dark-purple shadow-sm z-30" />
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default function JourneyGallery({ data }: JourneyGalleryProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="container mx-auto px-6 py-20 text-center text-muted-purple font-fraunces">
+        <p>Arsip perjalanan belum tersedia.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-6 py-12 relative">
+      {/* GARIS TENGAH (TIMELINE) */}
+      <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-dark-purple/20 h-full transform md:-translate-x-1/2" />
+
+      <div className="space-y-20">
+        {data.map((item, index) => (
+          <JourneyItem key={item.id} item={item} isEven={index % 2 === 0} />
+        ))}
       </div>
     </div>
   );

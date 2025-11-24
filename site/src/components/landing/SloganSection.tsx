@@ -3,8 +3,13 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { LandingPageData } from "@/types/strapi";
 
-export default function SloganSection() {
+interface SloganSectionProps {
+  data: LandingPageData | null;
+}
+
+export default function SloganSection({ data }: SloganSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -12,7 +17,7 @@ export default function SloganSection() {
     <section
       ref={ref}
       className="py-24 bg-dark-purple text-off-white relative overflow-hidden">
-      {/* Background Pattern: Garis Kontur Tipis (CSS Radial Gradient trick) */}
+      {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-10"
         style={{
@@ -30,12 +35,15 @@ export default function SloganSection() {
           {/* Decorative Top Line */}
           <div className="w-24 h-1 bg-pale-rose mb-8" />
 
+          {/* Judul Slogan (Strapi) */}
           <h2 className="font-hamburg text-5xl md:text-7xl lg:text-8xl mb-6 tracking-wide text-pale-rose">
-            &ldquo;Gesa Gesu Sesu Sasa&rdquo;
+            &ldquo;{data?.sloganTitle || "Gesa Gesu Sesu Sasa"}&rdquo;
           </h2>
 
+          {/* Subjudul Slogan (Strapi) */}
           <h3 className="font-birds text-2xl md:text-4xl text-off-white/80 max-w-xl mx-auto leading-relaxed">
-            Geologi Satu, Geologi Sama, Senang Susah Sama-Sama
+            {data?.sloganSubtitle ||
+              "Geologi Satu, Geologi Sama, Senang Susah Sama-Sama"}
           </h3>
 
           {/* Decorative Bottom Line */}

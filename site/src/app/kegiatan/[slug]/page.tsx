@@ -1,125 +1,148 @@
-import { ACTIVITIES_DATA } from "@/data/activities";
+import { fetchAPI, getStrapiMedia } from "@/lib/strapi";
+import { Activity } from "@/types/strapi";
+import RichTextRenderer from "@/components/ui/RichTextRenderer";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import PhotoCarousel from "@/components/ui/PhotoCarousel";
-import Link from "next/link";
 import {
-  FaArrowLeft,
   FaCalendarAlt,
   FaMapMarkerAlt,
   FaTag,
+  FaArrowLeft,
+  FaCamera,
 } from "react-icons/fa";
-import { notFound } from "next/navigation";
 
-// Generate static params untuk performa (Optional tapi recommended di Next.js)
-export async function generateStaticParams() {
-  return ACTIVITIES_DATA.map((activity) => ({
-    slug: activity.slug,
-  }));
+// Fungsi mengambil data
+async function getActivityBySlug(slug: string) {
+  try {
+    const res = await fetchAPI("/activities", {
+      filters: {
+        slug: {
+          $eq: slug,
+        },
+      },
+      populate: "*",
+    });
+
+    return res?.data?.length > 0 ? (res.data[0] as Activity) : null;
+  } catch (error) {
+    console.error("Error fetching activity detail:", error);
+    return null;
+  }
 }
 
-export default function KegiatanDetail({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  return <DetailContent params={params} />;
-}
-
-// Pisahkan komponen content agar bisa menggunakan async/await unwrapping params dengan rapi
-async function DetailContent({
+export default async function ActivityDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const activity = ACTIVITIES_DATA.find((a) => a.slug === slug);
+  const activity = await getActivityBySlug(slug);
 
   if (!activity) {
     notFound();
   }
 
+  // --- LOGIKA GAMBAR ---
+  // 1. Ambil semua gambar jika ada
+  const allImages = activity.images || [];
+
+  // 2. Cover Image adalah gambar pertama
+  const coverImageUrl =
+    allImages.length > 0 ? getStrapiMedia(allImages[0].url) : null;
+
+  // 3. Galeri adalah gambar sisanya (indeks 1 ke atas)
+  //    Jika hanya ada 1 gambar, maka galeri kosong.
+  const galleryImages = allImages.length > 1 ? allImages.slice(0) : [];
+
   return (
-    <div className="min-h-screen flex flex-col bg-off-white">
+    <div className="min-h-screen flex flex-col bg-off-white font-fraunces">
       <Navbar />
 
       <main className="flex-grow pt-32 pb-24">
-        <article className="container mx-auto px-6">
-          {/* BREADCRUMB & BACK BUTTON */}
-          <div className="mb-8">
-            <Link
-              href="/kegiatan"
-              className="inline-flex items-center gap-2 text-muted-purple hover:text-dark-purple transition-colors font-bold font-fraunces text-sm">
-              <FaArrowLeft /> Kembali ke Agenda
-            </Link>
-          </div>
+        {/* === HEADER ARTICLE === */}
+        <article className="container mx-auto px-6 max-w-5xl">
+          {/* Navigasi Balik */}
+          <Link
+            href="/kegiatan"
+            className="inline-flex items-center gap-2 text-muted-purple hover:text-dark-purple mb-8 transition-colors text-sm font-bold tracking-wide uppercase">
+            <FaArrowLeft /> Kembali ke Daftar Kegiatan
+          </Link>
 
-          {/* HEADER SECTION */}
-          <header className="mb-12 border-b border-dark-purple/10 pb-12">
-            <div className="flex flex-wrap gap-4 mb-6">
-              <span className="px-4 py-1 rounded-full bg-pale-rose/20 text-dark-purple font-bold text-sm flex items-center gap-2">
-                <FaTag size={12} /> {activity.category}
+          {/* Judul & Meta */}
+          <header className="mb-12 text-center">
+            <div className="flex flex-wrap gap-4 items-center justify-center text-sm text-muted-purple mb-6 uppercase tracking-wider">
+              <span className="flex items-center gap-1 px-3 py-1 border border-pale-rose/30 rounded-full text-dark-purple font-bold bg-pale-rose/10">
+                <FaTag className="text-xs" /> {activity.category}
               </span>
-              <span className="px-4 py-1 rounded-full border border-muted-purple/20 text-muted-purple font-fraunces text-sm flex items-center gap-2">
-                <FaCalendarAlt size={12} /> {activity.date}
+              <span className="flex items-center gap-2">
+                <FaCalendarAlt /> {activity.date}
+              </span>
+              <span className="flex items-center gap-2">
+                <FaMapMarkerAlt /> {activity.location}
               </span>
             </div>
 
-            <h1 className="font-hamburg text-5xl md:text-7xl text-dark-purple mb-6 leading-tight max-w-4xl">
+            <h1 className="font-hamburg text-5xl md:text-7xl text-dark-purple leading-tight mb-8">
               {activity.title}
             </h1>
-
-            <div className="flex items-center gap-2 text-lg font-fraunces text-muted-purple">
-              <FaMapMarkerAlt className="text-pale-rose" />
-              <span className="border-b border-pale-rose/50 pb-0.5">
-                {activity.location}
-              </span>
-            </div>
           </header>
 
-          {/* TWO COLUMN CONTENT LAYOUT */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* LEFT: MAIN CONTENT (TEXT) */}
-            <div className="lg:col-span-7">
-              <div
-                className="prose prose-lg prose-purple font-fraunces text-muted-purple leading-relaxed text-justify"
-                dangerouslySetInnerHTML={{ __html: activity.content }} // Render HTML string
+          {/* Cover Image (Hero) */}
+          {coverImageUrl && (
+            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-sm overflow-hidden shadow-xl mb-16 group">
+              <img
+                src={coverImageUrl}
+                alt={activity.title}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
+              <div className="absolute inset-0 border-[12px] border-white/20 pointer-events-none" />
             </div>
+          )}
 
-            {/* RIGHT: GALLERY SIDEBAR */}
-            <div className="lg:col-span-5 space-y-6">
-              {/* Photo Carousel Component */}
-              <div className="sticky top-32">
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="font-birds text-2xl text-dark-purple">
-                    Dokumentasi
-                  </h3>
-                  <span className="text-xs font-fraunces text-muted-purple/50">
-                    {activity.images.length > 0
-                      ? `${activity.images.length} Foto`
-                      : "No Image"}
-                  </span>
-                </div>
-
-                {/* Jika images kosong, PhotoCarousel otomatis handle tampil placeholder/text, 
-                            tapi kita bisa kasih wrapper style biar rapi */}
-                <PhotoCarousel
-                  images={activity.images}
-                  aspectRatio="aspect-[4/3]"
-                />
-
-                {/* Caption Decor */}
-                <div className="mt-4 p-4 bg-dusty-lavender/10 rounded-sm border-l-4 border-pale-rose">
-                  <p className="text-xs text-muted-purple italic font-fraunces">
-                    Dokumentasi resmi kegiatan HMTG FT UGM. Hak cipta
-                    dilindungi.
-                  </p>
-                </div>
-              </div>
-            </div>
+          {/* Content Body */}
+          <div className="prose prose-lg prose-purple max-w-3xl mx-auto text-dark-purple/80 leading-loose text-justify font-normal">
+            <RichTextRenderer content={activity.content} />
           </div>
         </article>
+
+        {/* === GALLERY SECTION (Geo-Editorial Masonry) === */}
+        {galleryImages.length > 0 && (
+          <section className="container mx-auto px-6 mt-24 border-t border-dark-purple/10 pt-16">
+            <div className="text-center mb-12">
+              <span className="font-birds text-4xl text-pale-rose block mb-2">
+                Dokumentasi Visual
+              </span>
+              <h2 className="font-hamburg text-4xl text-dark-purple flex items-center justify-center gap-3">
+                <FaCamera className="text-2xl opacity-50" /> Lensa Kegiatan
+              </h2>
+            </div>
+
+            {/* Masonry Grid Layout */}
+            <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 max-w-6xl mx-auto">
+              {galleryImages.map((img) => {
+                const src = getStrapiMedia(img.url);
+                if (!src) return null;
+
+                return (
+                  <div
+                    key={img.id}
+                    className="break-inside-avoid relative group rounded-sm overflow-hidden bg-gray-100 shadow-lg cursor-pointer">
+                    <img
+                      src={src}
+                      alt={img.alternativeText || "Dokumentasi HMTG"}
+                      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+
+                    {/* Overlay Info (Optional) */}
+                    <div className="absolute inset-0 bg-dark-purple/0 group-hover:bg-dark-purple/20 transition-colors duration-300" />
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

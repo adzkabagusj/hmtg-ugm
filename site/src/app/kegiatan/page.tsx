@@ -1,8 +1,29 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ActivityFeed from "@/components/kegiatan/ActivityFeed";
+import { fetchAPI } from "@/lib/strapi";
+import { Activity } from "@/types/strapi";
 
-export default function KegiatanPage() {
+// Fungsi async untuk mengambil data Activities
+async function getActivities() {
+  try {
+    // Request ke endpoint /activities dengan parameter populate=* untuk mengambil gambar
+    const res = await fetchAPI("/activities", {
+      populate: "*",
+      sort: "date:desc", // Mengurutkan dari yang terbaru (opsional, sesuaikan kebutuhan)
+    });
+
+    return res.data as Activity[];
+  } catch (error) {
+    console.error("Error fetching activities:", error);
+    return [];
+  }
+}
+
+export default async function KegiatanPage() {
+  // Panggil fungsi fetch data
+  const activities = await getActivities();
+
   return (
     <div className="min-h-screen flex flex-col bg-off-white">
       <Navbar />
@@ -22,8 +43,8 @@ export default function KegiatanPage() {
           </p>
         </section>
 
-        {/* TIMELINE FEED */}
-        <ActivityFeed />
+        {/* TIMELINE FEED DENGAN DATA ASLI */}
+        <ActivityFeed data={activities} />
       </main>
 
       <Footer />

@@ -1,5 +1,5 @@
 {
-  "kind": "collectionType",
+  "kind": "singleType",
   "collectionName": "landing_pages",
   "info": {
     "singularName": "landing-page",

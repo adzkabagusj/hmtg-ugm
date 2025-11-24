@@ -47,7 +47,7 @@ export default function LandingFeatures() {
               viewport={{ once: true }}
               className="md:w-1/2 w-full h-64 md:h-80 bg-pale-rose/20 rounded-tl-[4rem] rounded-br-[4rem] flex items-center justify-center relative overflow-hidden">
               <div className="absolute inset-0 border-2 border-dark-purple/10 m-4 rounded-tl-[3.5rem] rounded-br-[3.5rem]" />
-              <span className="font-hamburg text-9xl text-dark-purple/5 select-none absolute">
+              <span className="font-hamburg text-9xl text-dark-purple/20 select-none absolute">
                 Activity
               </span>
             </motion.div>
@@ -84,7 +84,8 @@ export default function LandingFeatures() {
               </h2>
               <p className="font-fraunces text-lg text-off-white/70 mb-8 leading-relaxed max-w-md ml-auto md:ml-0">
                 Kumpulan pemikiran, trivia geologi, dan karya kreatif mahasiswa.
-                Temukan "Trivia Bumi Gadjah Mada" dan publikasi lainnya di sini.
+                Temukan &quot;Trivia Bumi Gadjah Mada&quot; dan publikasi
+                lainnya di sini.
               </p>
               <Link
                 href="/karya"
@@ -126,11 +127,11 @@ export default function LandingFeatures() {
                 <FaArchive className="text-2xl" />
               </div>
               <h2 className="font-hamburg text-5xl md:text-6xl text-dark-purple mb-6">
-                Arsip & Database
+                Arsip - Our Journey
               </h2>
               <p className="font-fraunces text-lg text-muted-purple mb-8">
-                Pusat penyimpanan dokumen, sejarah, dan data penting organisasi.
-                Akses informasi dari masa lalu hingga sekarang.
+                Menelusuri jejak langkah sejarah, pencapaian, dan momen berharga
+                yang telah membentuk identitas HMTG UGM dari masa ke masa.
               </p>
               <Link href="/arsip">
                 <button className="bg-dark-purple text-off-white px-8 py-3 rounded-full font-fraunces font-bold hover:bg-muted-purple transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
