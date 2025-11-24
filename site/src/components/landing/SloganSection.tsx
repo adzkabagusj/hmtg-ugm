@@ -11,36 +11,35 @@ export default function SloganSection() {
   return (
     <section
       ref={ref}
-      className="py-20 bg-gradient-to-br from-pale-rose to-dusty-lavender"
-    >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={isInView ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Decorative element */}
-          <div className="mb-6">
-            <svg
-              className="w-16 h-16 mx-auto text-dark-purple opacity-50"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
+      className="py-24 bg-dark-purple text-off-white relative overflow-hidden">
+      {/* Background Pattern: Garis Kontur Tipis (CSS Radial Gradient trick) */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: "radial-gradient(#C9ADA7 1px, transparent 1px)",
+          backgroundSize: "30px 30px",
+        }}
+      />
 
-          <h2 className="font-hamburg text-4xl sm:text-5xl lg:text-6xl text-dark-purple mb-4">
-            Membumi Mengabdi,
-            <br />
-            Jayalah Geologi!
+      <div className="container mx-auto px-6 text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center">
+          {/* Decorative Top Line */}
+          <div className="w-24 h-1 bg-pale-rose mb-8" />
+
+          <h2 className="font-hamburg text-5xl md:text-7xl lg:text-8xl mb-6 tracking-wide text-pale-rose">
+            &ldquo;Gesa Gesu Sesu Sasa&rdquo;
           </h2>
 
-          <div className="w-24 h-1 bg-dark-purple mx-auto mt-6 rounded-full" />
+          <h3 className="font-birds text-2xl md:text-4xl text-off-white/80 max-w-xl mx-auto leading-relaxed">
+            Geologi Satu, Geologi Sama, Senang Susah Sama-Sama
+          </h3>
+
+          {/* Decorative Bottom Line */}
+          <div className="w-24 h-1 bg-pale-rose mt-8" />
         </motion.div>
       </div>
     </section>

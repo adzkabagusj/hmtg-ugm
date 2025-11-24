@@ -1,130 +1,119 @@
 "use client";
 
-import Image from "next/image";
-import SocialLink from "../ui/SocialLink";
-import { FaInstagram, FaFacebook, FaLinkedin, FaYoutube } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import Link from "next/link";
+import {
+  FaInstagram,
+  FaFacebook,
+  FaLinkedin,
+  FaYoutube,
+  FaEnvelope,
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6"; // Icon X terbaru
 
 export default function Footer() {
-  const socialLinks = [
-    {
-      href: "https://www.instagram.com/hmtg_ftugm/",
-      icon: FaInstagram,
-      label: "Instagram",
-    },
-    {
-      href: "https://web.facebook.com/people/hmtg_ftugm/100079858263879/?sk=about",
-      icon: FaFacebook,
-      label: "Facebook",
-    },
-    {
-      href: "https://www.linkedin.com/company/himpunan-mahasiswa-teknik-geologi-ft-ugm/",
-      icon: FaLinkedin,
-      label: "LinkedIn",
-    },
-    {
-      href: "https://x.com/hmtg_ftugm",
-      icon: FaXTwitter,
-      label: "X (Twitter)",
-    },
-    {
-      href: "https://www.youtube.com/channel/UCVFZXIECpsplf2-CBPAnm9A",
-      icon: FaYoutube,
-      label: "YouTube",
-    },
-  ];
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-dark-purple text-off-white py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Logo Section */}
-          <div className="flex flex-col items-center md:items-start">
-            <div className="flex items-center space-x-4 mb-4">
-              <Image
-                src="/logo/hmtg-logo.png"
-                alt="HMTG Logo"
-                width={60}
-                height={60}
-                className="object-contain"
-              />
-              <Image
-                src="/logo/ugm-logo.png"
-                alt="UGM Logo"
-                width={60}
-                height={60}
-                className="object-contain"
-              />
-            </div>
-            <h3 className="font-hamburg text-xl mb-2">HMTG FT UGM</h3>
-            <p className="text-sm text-dusty-lavender">
+    <footer className="bg-dark-purple text-off-white pt-16 pb-8 border-t-4 border-pale-rose">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          {/* Kolom 1: Identitas */}
+          <div className="space-y-4">
+            <h3 className="font-hamburg text-4xl text-pale-rose">
+              HMTG FT UGM
+            </h3>
+            <p className="font-fraunces text-sm text-off-white/70 leading-relaxed">
               Himpunan Mahasiswa Teknik Geologi
+              <br />
+              Fakultas Teknik
+              <br />
+              Universitas Gadjah Mada
             </p>
           </div>
 
-          {/* Contact Section */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="font-fraunces font-bold text-lg mb-4">Kontak</h4>
-            <div className="space-y-2 text-sm">
-              <p className="text-dusty-lavender">
-                <span className="font-semibold text-off-white">Alamat:</span>
-                <br />
-                Jl. Grafika Bulaksumur No.2
-                <br />
-                Senolowo, Sinduadi, Kec. Mlati
-                <br />
-                Kabupaten Sleman, DIY 55284
-              </p>
-              <p className="text-dusty-lavender">
-                <span className="font-semibold text-off-white">Email:</span>
-                <br />
-                <a
-                  href="mailto:hmtg.ft@ugm.ac.id"
-                  className="hover:text-pale-rose transition-colors"
-                >
-                  hmtg.ft@ugm.ac.id
-                </a>
-              </p>
-              <p className="text-dusty-lavender">
-                <span className="font-semibold text-off-white">WhatsApp:</span>
-                <br />
-                <a
-                  href="https://wa.me/6281234567899"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-pale-rose transition-colors"
-                >
-                  081234567899 (Rahma)
-                </a>
-              </p>
+          {/* Kolom 2: Alamat (Data Real) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="font-birds text-2xl text-pale-rose">Sekretariat</h4>
+            <p className="font-fraunces text-sm text-off-white/80 leading-relaxed max-w-md">
+              Jl. Grafika Bulaksumur No.2, Senolowo, Sinduadi, Kec. Mlati,
+              Kabupaten Sleman, Daerah Istimewa Yogyakarta 55284
+            </p>
+            <div className="flex items-center gap-2 text-sm text-pale-rose hover:text-white transition-colors">
+              <FaEnvelope />
+              <a href="mailto:hmtg.ft@ugm.ac.id">hmtg.ft@ugm.ac.id</a>
             </div>
           </div>
 
-          {/* Social Media Section */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="font-fraunces font-bold text-lg mb-4">
-              Media Sosial
-            </h4>
-            <div className="flex space-x-4">
-              {socialLinks.map((link) => (
-                <SocialLink
-                  key={link.href}
-                  href={link.href}
-                  icon={link.icon}
-                  label={link.label}
-                />
-              ))}
+          {/* Kolom 3: Social Media (Data Real) */}
+          <div className="space-y-4">
+            <h4 className="font-birds text-2xl text-pale-rose">Terhubung</h4>
+            <div className="flex gap-4">
+              <SocialIcon
+                href="https://www.instagram.com/hmtg_ftugm/"
+                icon={<FaInstagram />}
+                label="Instagram"
+              />
+              <SocialIcon
+                href="https://x.com/hmtg_ftugm"
+                icon={<FaXTwitter />}
+                label="Twitter/X"
+              />
+              <SocialIcon
+                href="https://www.linkedin.com/company/himpunan-mahasiswa-teknik-geologi-ft-ugm/"
+                icon={<FaLinkedin />}
+                label="LinkedIn"
+              />
+              <SocialIcon
+                href="https://web.facebook.com/people/hmtg_ftugm/100079858263879/"
+                icon={<FaFacebook />}
+                label="Facebook"
+              />
+              <SocialIcon
+                href="https://www.youtube.com/channel/UCVFZXIECpsplf2-CBPAnm9A"
+                icon={<FaYoutube />}
+                label="YouTube"
+              />
             </div>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-muted-purple text-center">
-          <p className="text-sm text-dusty-lavender">
-            © 2025 HMTG-UGM | All rights reserved.
+        <div className="border-t border-off-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-fraunces text-xs text-off-white/40 text-center md:text-left">
+            &copy; {currentYear} HMTG UGM. Membumi Mengabdi, Jayalah Geologi!
           </p>
+          <div className="flex gap-6 font-fraunces text-xs text-off-white/40">
+            <Link href="#" className="hover:text-pale-rose transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="#" className="hover:text-pale-rose transition-colors">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+// Komponen Kecil untuk Icon agar rapi
+function SocialIcon({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="w-10 h-10 flex items-center justify-center rounded-full bg-off-white/5 border border-off-white/10 text-pale-rose hover:bg-pale-rose hover:text-dark-purple hover:scale-110 transition-all duration-300">
+      {icon}
+    </a>
   );
 }

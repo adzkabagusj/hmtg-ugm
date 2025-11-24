@@ -1,33 +1,31 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import ActivityFeed from "@/components/kegiatan/ActivityFeed";
 
 export default function KegiatanPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col bg-off-white">
       <Navbar />
-      <main className="pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="font-birds text-5xl sm:text-6xl text-dark-purple mb-6">
-              Halaman Kegiatan
-            </h1>
-            <div className="w-24 h-1 bg-pale-rose mx-auto mb-8 rounded-full" />
-            <p className="font-fraunces text-lg text-muted-purple max-w-2xl mx-auto">
-              Konten untuk halaman Kegiatan akan segera hadir. Halaman ini akan
-              menampilkan berbagai aktivitas dan program yang dilakukan oleh
-              HMTG FT UGM.
-            </p>
-          </motion.div>
-        </div>
+
+      <main className="flex-grow pt-32 pb-24">
+        {/* HEADER SECTION */}
+        <section className="container mx-auto px-6 mb-16 text-center">
+          <span className="font-birds text-3xl text-pale-rose mb-2 block">
+            Dinamika Lapangan
+          </span>
+          <h1 className="font-hamburg text-6xl md:text-7xl lg:text-8xl text-dark-purple mb-6">
+            Agenda & Kegiatan
+          </h1>
+          <p className="font-fraunces text-lg text-muted-purple max-w-2xl mx-auto leading-relaxed">
+            Catatan perjalanan, ekspedisi lapangan, dan kegiatan akademik
+            Himpunan Mahasiswa Teknik Geologi UGM.
+          </p>
+        </section>
+
+        {/* TIMELINE FEED */}
+        <ActivityFeed />
       </main>
+
       <Footer />
     </div>
   );
