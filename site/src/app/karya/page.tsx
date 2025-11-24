@@ -31,18 +31,20 @@ export default async function KaryaPage() {
       <main className="flex-grow pt-32 pb-24">
         {/* HEADER SECTION (Tetap Sesuai Desain Awal) */}
         <section className="container mx-auto px-6 mb-16">
-          <div className="flex flex-col md:flex-row items-end gap-6 border-b border-off-white/10 pb-8">
-            <div className="flex-grow">
-              <div className="flex items-center gap-3 text-pale-rose mb-2">
+          <div className="flex flex-col items-center md:items-center gap-6 border-b border-off-white/10 pb-8 text-center">
+            <div className="md:flex-grow">
+              <div className="flex items-center justify-center gap-3 text-pale-rose mb-2">
                 <FaFeatherAlt className="text-xl" />
                 <span className="font-birds text-2xl">Inovasi & Kreasi</span>
               </div>
-              <h1 className="font-hamburg text-6xl md:text-8xl text-off-white leading-none">
+
+              <h1 className="font-hamburg text-6xl md:text-8xl text-off-white leading-none text-center">
                 Galeri <br /> Karya
               </h1>
             </div>
+
             <div className="md:w-1/3 pb-2">
-              <p className="font-fraunces text-off-white/60 text-lg leading-relaxed text-right md:text-left">
+              <p className="font-fraunces text-off-white/60 text-lg leading-relaxed text-center">
                 Wadah apresiasi bagi pemikiran kritis dan kreativitas mahasiswa
                 Teknik Geologi UGM.
               </p>

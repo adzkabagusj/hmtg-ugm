@@ -47,7 +47,7 @@ export default function LandingFeatures() {
               viewport={{ once: true }}
               className="md:w-1/2 w-full h-64 md:h-80 bg-pale-rose/20 rounded-tl-[4rem] rounded-br-[4rem] flex items-center justify-center relative overflow-hidden">
               <div className="absolute inset-0 border-2 border-dark-purple/10 m-4 rounded-tl-[3.5rem] rounded-br-[3.5rem]" />
-              <span className="font-hamburg text-9xl text-dark-purple/20 select-none absolute">
+              <span className="font-hamburg text-6xl md:text-9xl text-dark-purple/5 select-none absolute">
                 Activity
               </span>
             </motion.div>

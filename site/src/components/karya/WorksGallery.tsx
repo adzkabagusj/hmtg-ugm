@@ -22,8 +22,8 @@ export default function WorksGallery({ data }: WorksGalleryProps) {
         {/* === INTRO CARD (KOTAK PERTAMA STATIS) === */}
         {/* Ini tetap dipertahankan sesuai request layout Trivia Bumi */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          // initial={{ opacity: 0, scale: 0.9 }}
+          // whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           className="bg-off-white/5 border border-off-white/10 p-8 rounded-sm flex flex-col justify-center min-h-[300px]">
           <h3 className="font-birds text-4xl text-pale-rose mb-4">
@@ -54,8 +54,8 @@ export default function WorksGallery({ data }: WorksGalleryProps) {
               target="_blank"
               rel="noreferrer">
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                // initial={{ opacity: 0, y: 30 }}
+                // whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 className="group relative bg-muted-purple overflow-hidden h-[400px] cursor-pointer rounded-sm">

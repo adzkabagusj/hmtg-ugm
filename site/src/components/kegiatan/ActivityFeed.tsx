@@ -44,7 +44,7 @@ export default function ActivityFeed({ data }: ActivityFeedProps) {
               key={item.id} // Gunakan ID dari Strapi sebagai key
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className={`relative flex flex-col md:flex-row gap-8 items-center ${
                 isEven ? "md:flex-row-reverse" : ""

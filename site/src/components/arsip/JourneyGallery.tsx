@@ -40,7 +40,7 @@ const JourneyItem = ({ item, isEven }: { item: Journey; isEven: boolean }) => {
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true }}
       transition={{ duration: 0.6 }}
       className={`relative flex flex-col md:flex-row gap-8 items-center ${
         isEven ? "md:flex-row-reverse" : ""
