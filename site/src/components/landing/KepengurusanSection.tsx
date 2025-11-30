@@ -56,28 +56,26 @@ export default function KepengurusanSection({
                 <p>
                   Pengurus Harian merupakan pilar utama organisasi yang terdiri
                   dari Ketua Himpunan, Sekretaris Jendral, Sekretaris,
-                  Bendahara, Wakil Bendahara, serta Kepala-Kepala Bidang dan
-                  Divisi yang bersinergi untuk menjalankan roda organisasi.
+                  Bendahara, serta Kepala-Kepala Bidang dan Divisi yang
+                  bersinergi untuk menjalankan roda organisasi.
                 </p>
               </div>
 
-              {/* List Departemen/Divisi (Visual Tag) */}
+              {/* List Bidang dan Divisi (Visual Tag) */}
               <div className="mt-8">
                 <h3 className="font-birds text-2xl text-dark-purple mb-4">
-                  Departemen & Divisi
+                  Bidang dan Divisi
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {[
-                    "Dana Usaha",
-                    "Diklar",
-                    "Humas",
-                    "Keanggotaan & Alumni",
                     "Kerohanian",
-                    "Kerumahtanggaan",
-                    "Minat & Bakat",
-                    "Litbang",
+                    "Minat dan Bakat",
                     "Sosial",
-                    "Teknologi Informasi",
+                    "Eksternal",
+                    "PSDM",
+                    "Kebutuhan Anggota",
+                    "Keprofesian dan Keilmuan",
+                    "TIM",
                   ].map((dept, idx) => (
                     <span
                       key={idx}
