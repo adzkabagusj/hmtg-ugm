@@ -32,6 +32,27 @@ async function getActivityBySlug(slug: string) {
   }
 }
 
+// Generate static params untuk pre-rendering saat build
+export async function generateStaticParams() {
+  try {
+    const res = await fetchAPI("/activities", {
+      fields: ["slug"],
+      pagination: {
+        limit: -1, // Ambil semua slug
+      },
+    });
+
+    if (!res?.data) return [];
+
+    return res.data.map((activity: Activity) => ({
+      slug: activity.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
+}
+
 export default async function ActivityDetailPage({
   params,
 }: {

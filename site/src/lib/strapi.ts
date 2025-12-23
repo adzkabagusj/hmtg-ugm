@@ -28,7 +28,7 @@ export async function fetchAPI(
   try {
     // Merge default and user options
     const mergedOptions = {
-      next: { revalidate: 60 }, // Revalidate tiap 60 detik (ISR)
+      next: { revalidate: 3600 }, // Revalidate tiap 1 jam (ISR) - Diubah dari 60 detik untuk menghemat API call
       headers: {
         "Content-Type": "application/json",
       },
