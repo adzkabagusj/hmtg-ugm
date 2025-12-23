@@ -28,7 +28,7 @@ export async function fetchAPI(
   try {
     // Merge default and user options
     const mergedOptions = {
-      next: { revalidate: 3600 }, // Revalidate tiap 1 jam (ISR) - Diubah dari 60 detik untuk menghemat API call
+      next: { revalidate: 86400 }, // Revalidate tiap 24 jam
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,9 +41,8 @@ export async function fetchAPI(
       encodeValuesOnly: true,
     });
 
-    const requestUrl = `${getStrapiURL()}/api${path}${
-      queryString ? `?${queryString}` : ""
-    }`;
+    const requestUrl = `${getStrapiURL()}/api${path}${queryString ? `?${queryString}` : ""
+      }`;
 
     // Trigger API call
     const response = await fetch(requestUrl, mergedOptions);
