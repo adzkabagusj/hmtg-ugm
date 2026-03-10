@@ -26,6 +26,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "certain-angel-bc161b7e61.strapiapp.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "certain-angel-bc161b7e61.strapiapp.comhttps",
         port: "",
         pathname: "/**",
